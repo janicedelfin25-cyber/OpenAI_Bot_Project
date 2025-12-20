@@ -36,23 +36,31 @@ if "api_key_valid" not in st.session_state:
     st.session_state.api_key_valid = False
 
 # Get API key from environment or secrets
-api_key = os.getenv("OPENAI_API_KEY") or st.secrets.get("OPENAI_API_KEY")
+try:
+    api_key = st.secrets.get("OPENAI_API_KEY") or os.getenv("OPENAI_API_KEY")
+except:
+    api_key = os.getenv("OPENAI_API_KEY")
 
 if not api_key:
     st.error("❌ API Key Error")
     st.markdown("""
     ### Missing OpenAI API Key
     
-    The OPENAI_API_KEY environment variable is not configured.
+    The OPENAI_API_KEY is not configured.
     
-    **To fix this:**
-    1. Go to your Streamlit Cloud settings
-    2. Add a secret named `OPENAI_API_KEY` with your OpenAI API key
-    3. Redeploy your app
+    **To fix this on Streamlit Cloud:**
+    1. Go to your Streamlit Cloud app dashboard
+    2. Click on your app → **Settings** (gear icon in top right)
+    3. Go to **Secrets** tab
+    4. Add this line:
+       ```
+       OPENAI_API_KEY=your_openai_api_key_here
+       ```
+    5. Click **Save** and your app will redeploy automatically
     
-    **Or for local development:**
-    1. Create a `.env` file in the project root
-    2. Add: `OPENAI_API_KEY=your_key_here`
+    **For local development:**
+    1. Create `.streamlit/secrets.toml` file
+    2. Add: `OPENAI_API_KEY="your_key_here"`
     3. Run: `streamlit run streamlit_app.py`
     """)
     st.stop()
@@ -62,6 +70,7 @@ try:
     st.session_state.api_key_valid = True
 except Exception as e:
     st.error(f"❌ API Configuration Error: {str(e)}")
+    st.markdown(f"**Error details:** {str(e)}")
     st.stop()
 
 # Header
