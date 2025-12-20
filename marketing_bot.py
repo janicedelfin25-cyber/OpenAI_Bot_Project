@@ -6,7 +6,11 @@ from openai import OpenAI
 load_dotenv()
 
 # Initialize the OpenAI client
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+api_key = os.getenv("OPENAI_API_KEY")
+if not api_key:
+    raise ValueError("OPENAI_API_KEY environment variable is not set. Please set it in your .env file or system environment.")
+
+client = OpenAI(api_key=api_key)
 
 class DigitalMarketingConsultant:
     """A digital marketing consultancy bot powered by OpenAI."""
