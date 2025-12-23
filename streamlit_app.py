@@ -1,12 +1,8 @@
 import os
 import streamlit as st
-from dotenv import load_dotenv
 from openai import OpenAI
 
-# Load environment variables
-load_dotenv()
-
-# Set page config
+# Set page config FIRST before any other streamlit commands
 st.set_page_config(
     page_title="Digital Marketing Consultancy Bot",
     page_icon="🎯",
