@@ -32,9 +32,10 @@ if "api_key_valid" not in st.session_state:
     st.session_state.api_key_valid = False
 
 # Get API key from environment or secrets
+api_key = None
 try:
-    api_key = st.secrets.get("OPENAI_API_KEY") or os.getenv("OPENAI_API_KEY")
-except:
+    api_key = st.secrets["OPENAI_API_KEY"]
+except (FileNotFoundError, KeyError):
     api_key = os.getenv("OPENAI_API_KEY")
 
 if not api_key:
